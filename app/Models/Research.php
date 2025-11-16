@@ -65,7 +65,6 @@ public function categories()
     return Category::whereIn('id', $this->category_ids ?? [])->get();
 }
 
-// With a proper accessor instead of relationship:
 public function getCategoryNamesAttribute()
 {
     return Category::whereIn('id', $this->category_ids ?? [])->pluck('name')->toArray();
