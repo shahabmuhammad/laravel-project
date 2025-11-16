@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+class Research extends Model implements HasMedia
+{
+    use InteractsWithMedia;
+
+
+
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'keywords',
+        'category_ids',
+        'publisher_id',
+        'type_id',
+        'file_path',
+        'slug',
+        'status',
+        'downloads',
+        'views',
+    ];
+
+    protected $casts = [
+        'category_ids' => 'array',
+    ];
+
+    // Relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
+    // public function categories()
+    // {
+    //     return Category::whereIn('id', $this->category_ids ?? [])->get();
+    // }
+
+
+    // public function getCategoryNamesAttribute()
+    // {
+    //     return $this->categories()->pluck('name')->toArray();
+    // }
+public function categories()
+{
+    return Category::whereIn('id', $this->category_ids ?? [])->get();
+}
+
+// With a proper accessor instead of relationship:
+public function getCategoryNamesAttribute()
+{
+    return Category::whereIn('id', $this->category_ids ?? [])->pluck('name')->toArray();
+}
+    public function bookmarkedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'bookmarks')->withTimestamps();
+    }
+
+
+    public function registerMediaCollections(): void
+    {
+        // store research files on the public `media` disk (public/media)
+        $this->addMediaCollection('research_files')->useDisk('media');
+    }
+}
