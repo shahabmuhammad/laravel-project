@@ -1,0 +1,56 @@
+
+:root{ --sidebar-bg:#066187; --muted:#6c757d; --card-border:#e6e9ee; --text:#222 }
+*{box-sizing:border-box}
+body{font-family: 'Open Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; background:#fbfbfd; color:var(--text);}
+
+/* Sidebar */
+#sidebar{width:210px; min-height:100vh; position:fixed; background:var(--sidebar-bg); color:#fff; left:0; top:0; padding-bottom:60px}
+.sidebar-top{padding:1px 16px}
+.logo-img{width:38px; height:38px; background:#fff; border-radius:6px; display:inline-block; vertical-align:middle}
+.logo-text{display:inline-block; margin-left:10px; font-size:12px; font-weight:700; vertical-align:middle}
+.small-muted{font-weight:600; color:rgba(255,255,255,0.85); font-size:10px; display:block; margin-top:4px; opacity:0.95}
+
+/* sidebar links */
+#sidebar ul{padding-left:0; margin-top:18px}
+#sidebar ul li{list-style:none}
+#sidebar ul li a{display:flex; align-items:center; gap:8px; padding:12px 18px; color:rgba(255,255,255,.95); text-decoration:none; border-left:4px solid transparent; font-size:14px}
+#sidebar ul li.active a{background:rgba(255,255,255,0.06); border-left-color:rgba(255,255,255,0.15); border-radius:6px; margin:6px}
+#sidebar ul li a:hover{background:rgba(255,255,255,0.03)}
+
+/* Page content */
+#page-content{margin-left:210px}
+.header{height:64px; display:flex; align-items:center; border-bottom:1px solid #eef1f4}
+.header .container-fluid{padding-left:24px; padding-right:24px}
+.avatar{width:36px; height:36px; background:#e9ecef; border-radius:50%}
+.bell-icon{font-size:1.15rem; color:#6c757d}
+
+/* content */
+.content{max-width:980px; margin:0 auto}
+.title{font-size:28px; font-weight:700; margin-top:8px}
+.sub{margin-top:4px; margin-bottom:12px}
+
+/* stat cards */
+.stat-card{border:1px solid var(--card-border); border-radius:8px; padding:14px 6px}
+.stat-number{font-size:22px; font-weight:700; margin-bottom:6px}
+.stat-label{font-size:13px; color:var(--muted)}
+
+/* charts */
+.chart-card{border:1px solid var(--card-border); border-radius:8px}
+.chart-card .card-title{font-size:14px; font-weight:600}
+
+/* legend dots */
+.dot{width:14px; height:14px; border-radius:50%; display:inline-block; margin-right:10px}
+
+/* statuses */
+.status.pending{color:#d98b00; font-weight:600}
+.status.approved{color:#198754; font-weight:600}
+
+/* footer */
+footer{border-top:1px solid #f0f2f5; padding-top:10px; margin-top:16px;}
+
+/* responsive */
+@media (max-width: 991px){
+  #sidebar{position:relative; width:100%; min-height:auto}
+  #page-content{margin-left:0}
+  .content{padding:12px}
+}

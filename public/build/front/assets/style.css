@@ -1,0 +1,528 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Navbar logo + text alignment fix */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+.navbar-brand img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+.navbar-brand span {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 18px;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 576px) {
+
+    /* Logo size */
+    .navbar-brand img {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Brand text size */
+    .navbar-brand span {
+        font-size: 12px;
+        line-height: 14px;
+        max-width: 90px;       
+        display: block;
+    }
+
+    /* Navbar padding reduce */
+    .navbar {
+        padding: 8px 0 !important;
+    }
+
+    /* Menu items spacing */
+    .navbar-nav .nav-link {
+        padding: 8px 0;
+        text-align: center;
+    }
+
+    /* Login / Signup buttons full width */
+    .navbar .btn {
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+    .navbar .d-flex {
+        flex-direction: column;
+        width: 100%;
+    }
+    .navbar .d-flex a {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+/* Tablet view improvements */
+@media (max-width: 768px) {
+    .navbar-nav .nav-link {
+        margin-right: 0;
+        padding: 8px 0;
+    }
+}
+
+
+/* Hero Section */
+.hero {
+  background-color: #f8fbff;
+}
+
+.hero h2 {
+  color: #004aad;
+}
+
+.btn-warning {
+  background-color: #ff8c00;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e67e00;
+}
+
+/* Cards hover */
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+
+/* Footer */
+.footer {
+  background-color: #1b1b1b;
+}
+
+.footer a:hover {
+  color: #ff8c00;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .hero {
+    text-align: center;
+  }
+}
+
+.stats-section {
+  background-color: #f8f9fa;
+}
+
+.stat-item {
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+}
+
+.stat-item i {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.stat-item h4 {
+  color: #212529;
+  font-size: 1.6rem;
+}
+
+.stat-item p {
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+
+.card img {
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+.card h6 {
+  font-size: 0.95rem;
+  color: #212529;
+}
+
+.card p {
+  font-size: 0.85rem;
+}
+
+.field-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 100%;
+  transition: transform 0.3s ease;
+}
+
+.field-card:hover .field-icon {
+  transform: scale(1.1);
+}
+
+.field-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.field-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom primary color */
+.text-primary-custom {
+  color: #066187 !important;
+}
+
+.btn-primary-custom {
+  background-color: #066187 !important;
+  border-color: #066187 !important;
+  color: #fff !important;
+  transition: 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+  background-color: #054e67 !important;
+  border-color: #054e67 !important;
+}
+
+/* Custom footer color */
+.bg-primary-custom {
+  background-color: #066187 !important;
+}
+
+/* Footer link styles */
+.footer-link {
+  color: #dce8ef;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Social media icon hover effect */
+.footer-social {
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.footer-social:hover {
+  color: #dce8ef;
+}
+
+.btn-primary-custom {
+  background-color: #066187;
+  border: none;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+  background-color: #054e6a;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #222;
+}
+
+.nav-link.active {
+  color: #007bff !important;
+  font-weight: 600;
+}
+
+.navbar-brand span {
+  color: #003366;
+}
+
+.about-section {
+  background-color: #f3f8ff;
+}
+
+.mission, .vision {
+  color: #333;
+}
+
+.team img {
+  object-fit: cover;
+}
+
+.join {
+  background-color: #f3f8ff;
+}
+
+.footer {
+  background-color: #003366;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #222;
+}
+
+.nav-link.active {
+  color: #007bff !important;
+  font-weight: 600;
+}
+
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.badge {
+  font-size: 0.7rem;
+  border-radius: 6px;
+}
+
+.footer {
+  background-color: #003366;
+}
+
+body {
+  background-color: #f8f9fa;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Navbar */
+.navbar-nav .nav-link {
+  color: #000 !important;
+  margin-right: 15px;
+  font-weight: 500;
+}
+.navbar-nav .nav-link.active {
+  color: #007bff !important;
+}
+
+/* Publication Cards */
+.publication-card {
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.publication-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+.publication-card img {
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Footer */
+.footer {
+  background-color: #003049;
+}
+.footer a {
+  color: #f1f1f1;
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.feature-box {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+  background-color: #0c4a6e;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.navbar-brand {
+  font-size: 0.9rem;
+}
+
+.nav-link {
+  color: #333 !important;
+}
+
+.nav-link.active {
+  font-weight: bold;
+}
+
+/* view categories */
+.field-card {
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 25px 20px;
+  transition: 0.3s;
+  height: 100%;
+}
+
+.field-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.field-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.field-title {
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+.explore-section {
+  background-color: #fff;
+}
+
+.field-card {
+  transition: all 0.3s ease;
+}
+
+.field-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.field-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.field-title {
+  color: #0b5345;
+  margin-top: 10px;
+}
+
+.field-card p {
+  color: #555;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  border-radius: 12px;
+  border: none;
+}
+
+.dropdown-menu .form-label {
+  color: #555;
+}
+
+.dropdown-menu .btn {
+  background-color: #0b5c73;
+  border: none;
+}
+
+.dropdown-menu .btn:hover {
+  background-color: #094c5f;
+}
+
+.btn-success {
+  background-color: #0b5c73;
+  border: none;
+}
+.btn-success:hover {
+  background-color: #0b5c73;
+}
+/* ---------- Responsive Fixes (Add These) ---------- */
+
+/* Navbar brand text & logo */
+.navbar-brand span {
+    font-size: 14px;
+    line-height: 16px;
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+        width: 40px;
+        height: 55px;
+    }
+    .navbar-brand span {
+        font-size: 12px;
+        line-height: 14px;
+    }
+}
+
+/* Hero section responsive */
+.hero h2 {
+    font-size: 2rem;
+}
+@media (max-width: 576px) {
+    .hero h2 {
+        font-size: 1.6rem;
+    }
+    .hero p {
+        font-size: 14px;
+    }
+}
+
+/* Featured publications card images */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 170px;
+    }
+}
+
+/* Stats section icons */
+.stat-item i {
+    font-size: 2.5rem !important;
+}
+@media (max-width: 576px) {
+    .stat-item h4 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Explore field category icons */
+.field-card img,
+.field-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+@media (max-width: 576px) {
+    .field-card img,
+    .field-img {
+        width: 65px;
+        height: 65px;
+    }
+}
+
+
+
