@@ -9,9 +9,11 @@
         <h3 class="fw-bold mb-4">Browse Publications</h3>
 
         <!-- SEARCH BAR -->
-        <section class="search-bar my-4">
+        <section class="search-bar my-4 w-100">
+
             <form action="{{ route('search') }}" method="GET">
-                <div class="input-group shadow-sm" style="max-width:600px;">
+                <div class="input-group mb-4 shadow-sm w-100" style="max-width:600px;">
+
                     <input type="text" class="form-control" name="query"
                            value="{{ request('query') }}"
                            placeholder="Search by title, author or keyword">
@@ -21,7 +23,8 @@
         </section>
 
         <!-- Filters -->
-        <div class="row g-3 mb-5">
+      <div class="row g-3 mb-5 mt-3">
+
             <div class="col-md-4">
                 <label class="form-label small fw-semibold">Category</label>
                 <input type="text" class="form-control" placeholder="Computer Science">
