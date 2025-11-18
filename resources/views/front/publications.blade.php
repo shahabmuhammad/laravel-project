@@ -5,7 +5,7 @@
     <section class="container my-5">
         <h4 class="fw-bold mb-4">{{ isset($category) ? 'Publications in: ' . $category->name : 'Publications' }}</h4>
 
-        <div class="row g-4">
+        <div class="row ">
             @if (isset($researches) && $researches->count())
                 @foreach ($researches as $item)
                     <div class="col-md-4">

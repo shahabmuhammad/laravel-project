@@ -50,25 +50,19 @@ class Research extends Model implements HasMedia
         return $this->belongsTo(Type::class);
     }
 
-    // public function categories()
-    // {
-    //     return Category::whereIn('id', $this->category_ids ?? [])->get();
-    // }
+    /**
+     * Get categories for this research based on category_ids JSON field
+     * Note: This returns a collection, not a relationship
+     */
+    public function categories()
+    {
+        return Category::whereIn('id', $this->category_ids ?? [])->get();
+    }
 
-
-    // public function getCategoryNamesAttribute()
-    // {
-    //     return $this->categories()->pluck('name')->toArray();
-    // }
-public function categories()
-{
-    return Category::whereIn('id', $this->category_ids ?? [])->get();
-}
-
-public function getCategoryNamesAttribute()
-{
-    return Category::whereIn('id', $this->category_ids ?? [])->pluck('name')->toArray();
-}
+    public function getCategoryNamesAttribute()
+    {
+        return Category::whereIn('id', $this->category_ids ?? [])->pluck('name')->toArray();
+    }
     public function bookmarkedByUsers()
     {
         return $this->belongsToMany(User::class, 'bookmarks')->withTimestamps();

@@ -99,7 +99,7 @@
                             <div style="height:280px"><canvas id="monthlyTrendChart"></canvas></div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-l">
                         <div class="card chart-card p-4 shadow-sm border-0 h-100">
                             <h6 class="card-title mb-3 fw-bold"><i class="bi bi-pie-chart me-2"></i>Research by Status</h6>
                             <div style="height:280px"><canvas id="statusPieChart"></canvas></div>
@@ -145,7 +145,7 @@
                                         <td>
                                             <div class="fw-semibold">{{ Str::limit($item->title, 50) }}</div>
                                         </td>
-                                        
+
                                         <td>{{ $item->user->name ?? 'N/A' }}</td>
                                         <td>
                                             @php
@@ -226,180 +226,305 @@
         @endrole
 
 
-      {{--  AUTHOR DASHBOARD  --}}
-@role('Author')
-<section class="mt-4">
+        {{--  AUTHOR DASHBOARD  --}}
+        @role('Author')
+            <section class="mt-4">
 
-    {{-- Notification Alert --}}
-    <div class="alert alert-info d-flex justify-content-between align-items-center mt-3">
-        <span>You have <strong>{{ $unreadCount }}</strong> unread notifications.</span>
-        <a href="{{ route('admin.notifications.index') }}" class="btn btn-sm btn-outline-primary">View</a>
-    </div>
-
-    {{-- Analytics Cards --}}
-    <div class="row g-3 mt-4">
-        <div class="col-md-4">
-            <div class="card p-3 text-center shadow-sm border-0">
-                <h4 class="fw-bold mb-0">{{ $analytics['allPublications'] ?? 0 }}</h4>
-                <p class="text-muted mb-0">All Publications</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center shadow-sm border-0">
-                <h4 class="fw-bold mb-0">{{ $analytics['totalViews'] ?? 0 }}</h4>
-                <p class="text-muted mb-0">Total Views</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center shadow-sm border-0">
-                <h4 class="fw-bold mb-0">{{ $analytics['totalCitations'] ?? 0 }}</h4>
-                <p class="text-muted mb-0">Total Citations</p>
-            </div>
-        </div>
-    </div>
-
-    {{-- Charts Row --}}
-    <div class="row mt-4 d-flex flex-wrap">
-        <div class="col-lg-7 col-md-12 mb-3">
-            <div class="card p-3 shadow-sm border-0" style="height:300px">
-                <h6 class="mb-3 fw-semibold">Bar Chart Overview</h6>
-                <canvas id="analyticsBarChart"></canvas>
-            </div>
-        </div>
-        <div class="col-lg-5 col-md-12 mb-3">
-            <div class="card p-3 shadow-sm border-0" style="height:300px">
-                <h6 class="mb-3 fw-semibold">Category Overview</h6>
-                <canvas id="analyticsDonutChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    {{-- Most Viewed Papers --}}
-    <div class="card shadow-sm border-0 p-3">
-        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3">
-            <h5 class="fw-semibold mb-2 mb-sm-0">Most Viewed Papers</h5>
-            <select class="form-select w-auto">
-                <option>Last week</option>
-                <option>Last month</option>
-                <option>Last quarter</option>
-            </select>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Title</th>
-                        <th>Views</th>
-                        <th>Citations</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($mostViewedPapers ?? [] as $paper)
-                        <tr>
-                            <td>{{ $paper->title }}</td>
-                            <td>{{ $paper->views ?? rand(100, 400) }}</td>
-                            <td>{{ $paper->citations ?? rand(5, 35) }}</td>
-                            <td>{{ $paper->created_at->format('M d, Y') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-</section>
-@endrole
-
-
-
-{{-- user dashboard --}}
-@role('User')
-<div class="my-4">
-
-    {{-- Stats Cards --}}
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h4>{{ $bookmarks }}</h4>
-                <p>Bookmarks</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h4>{{ $downloads }}</h4>
-                <p>Total Downloads</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h4>{{ $papersViewed }}</h4>
-                <p>Papers Viewed</p>
-            </div>
-        </div>
-    </div>
-
-    {{-- Search Bar --}}
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" action="{{ route('admin.dashboard') }}" class="row g-2 align-items-center">
-                <div class="col-md-4">
-                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
-                        placeholder="Search by title, author, or keyword">
+                {{-- Notification Alert --}}
+                <div class="alert alert-info d-flex justify-content-between align-items-center mt-3">
+                    <span>You have <strong>{{ $unreadCount }}</strong> unread notifications.</span>
+                    <a href="{{ route('admin.notifications.index') }}" class="btn btn-sm btn-outline-primary">View</a>
                 </div>
-                <div class="col-md-4">
-                    <select name="category" class="form-select">
-                        <option value="">All Categories</option>
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn w-100 text-white" style="background-color:#066187;">Search</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    {{-- Most Viewed Papers --}}
-    <div class="card mb-4">
-        <div class="card-header bg-light fw-semibold">Most Viewed Papers</div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-striped align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Category</th>
-                            <th>Last Viewed</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($chartData['mostViewed'] ?? [] as $paper)
-                            <tr>
-                                <td>{{ $paper->title }}</td>
-                                <td>{{ $paper->author->name ?? 'N/A' }}</td>
-                                <td>{{ implode(', ', $paper->categories->pluck('name')->toArray()) }}</td>
-                                <td>{{ $paper->updated_at->format('M d, Y') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center text-muted py-3">No viewed papers available yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                {{-- Analytics Cards --}}
+                <div class="row g-3 mt-4">
+                    <div class="col-md-4">
+                        <div class="card p-3 text-center shadow-sm border-0">
+                            <h4 class="fw-bold mb-0">{{ $analytics['allPublications'] ?? 0 }}</h4>
+                            <p class="text-muted mb-0">All Publications</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 text-center shadow-sm border-0">
+                            <h4 class="fw-bold mb-0">{{ $analytics['totalViews'] ?? 0 }}</h4>
+                            <p class="text-muted mb-0">Total Views</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 text-center shadow-sm border-0">
+                            <h4 class="fw-bold mb-0">{{ $analytics['totalCitations'] ?? 0 }}</h4>
+                            <p class="text-muted mb-0">Total Citations</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Charts Row --}}
+                <div class="row mt-4 d-flex flex-wrap">
+                    <div class="col-lg-7 col-md-12 mb-3">
+                        <div class="card p-3 shadow-sm border-0" style="height:300px">
+                            <h6 class="mb-3 fw-semibold">Bar Chart Overview</h6>
+                            <canvas id="analyticsBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12 mb-3">
+                        <div class="card p-3 shadow-sm border-0" style="height:300px">
+                            <h6 class="mb-3 fw-semibold">Category Overview</h6>
+                            <canvas id="analyticsDonutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Most Viewed Papers --}}
+                <div class="card shadow-sm border-0 p-3">
+                    <div
+                        class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3">
+                        <h5 class="fw-semibold mb-2 mb-sm-0">Most Viewed Papers</h5>
+                        <select class="form-select w-auto">
+                            <option>Last week</option>
+                            <option>Last month</option>
+                            <option>Last quarter</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Views</th>
+                                    <th>Citations</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($mostViewedPapers ?? [] as $paper)
+                                    <tr>
+                                        <td>{{ $paper->title }}</td>
+                                        <td>{{ $paper->views ?? rand(100, 400) }}</td>
+                                        <td>{{ $paper->citations ?? rand(5, 35) }}</td>
+                                        <td>{{ $paper->created_at->format('M d, Y') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        @endrole
+
+
+
+        {{-- USER DASHBOARD --}}
+        @role('User')
+            <div class="my-4">
+
+                {{-- Stats Cards --}}
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card stat-card shadow-sm border-0 h-100">
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-bookmark-fill fs-2 text-primary mb-3"></i>
+                                <div class="stat-number fw-bold">{{ $bookmarks ?? 0 }}</div>
+                                <div class="stat-label text-muted">Bookmarks</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card stat-card shadow-sm border-0 h-100">
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-download fs-2 text-success mb-3"></i>
+                                <div class="stat-number fw-bold">{{ $downloads ?? 0 }}</div>
+                                <div class="stat-label text-muted">Total Downloads</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card stat-card shadow-sm border-0 h-100">
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-eye-fill fs-2 text-info mb-3"></i>
+                                <div class="stat-number fw-bold">{{ $papersViewed ?? 0 }}</div>
+                                <div class="stat-label text-muted">Papers Viewed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Search Bar --}}
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h6 class="mb-3 fw-bold"><i class="bi bi-search me-2"></i>Search Research Papers</h6>
+                        <form method="GET" action="{{ route('admin.dashboard') }}" class="row g-3 align-items-end">
+                            <div class="col-md-5">
+                                <label for="search" class="form-label small text-muted">Search Query</label>
+                                <input type="text" id="search" name="search" value="{{ request('search') }}" 
+                                    class="form-control" placeholder="Search by title, author, or keyword">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="category" class="form-label small text-muted">Category</label>
+                                <select id="category" name="category" class="form-select">
+                                    <option value="">All Categories</option>
+                                    @foreach ($categories ?? [] as $cat)
+                                        <option value="{{ $cat->id }}"
+                                            {{ request('category') == $cat->id ? 'selected' : '' }}>
+                                            {{ $cat->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn w-100 text-white" style="background-color:#066187;">
+                                    <i class="bi bi-search me-1"></i>Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- Most Viewed Papers --}}
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-light border-0 py-3">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-eye-fill me-2"></i>My Recently Viewed Papers</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="px-4">Title</th>
+                                        <th>Author</th>
+                                        <th>Category</th>
+                                        <th>My Views</th>
+                                        <th>Last Viewed</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($chartData['mostViewed'] ?? [] as $paper)
+                                        <tr>
+                                            <td class="px-4">
+                                                <div class="fw-semibold text-dark">{{ Str::limit($paper->title ?? 'Untitled', 50) }}</div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ $paper->user->name ?? 'N/A' }}</span>
+                                            </td>
+                                            <td>
+                                                @if(isset($paper->categories) && $paper->categories->count() > 0)
+                                                    <span class="badge bg-light text-dark border">
+                                                        {{ $paper->categories->first()->name }}
+                                                    </span>
+                                                    @if($paper->categories->count() > 1)
+                                                        <span class="badge bg-light text-dark border">+{{ $paper->categories->count() - 1 }}</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted small">No category</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">
+                                                    <i class="bi bi-eye me-1"></i>{{ $paper->user_views ?? 1 }}
+                                                </span>
+                                            </td>
+                                            <td class="text-muted small">
+                                                {{ isset($paper->last_viewed_at) ? \Carbon\Carbon::parse($paper->last_viewed_at)->format('M d, Y H:i') : 'N/A' }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('front.publication.show', ['research' => $paper->slug ?? $paper->id]) }}" 
+                                                    class="btn btn-sm btn-outline-primary" target="_blank">
+                                                    <i class="bi bi-eye me-1"></i>View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">
+                                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                                No viewed papers yet. Start exploring research papers!
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- My Downloads --}}
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-light border-0 py-3">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-download me-2"></i>My Downloaded Papers</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="px-4">Title</th>
+                                        <th>Author</th>
+                                        <th>Category</th>
+                                        <th>Times Downloaded</th>
+                                        <th>Last Downloaded</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($chartData['myDownloads'] ?? [] as $paper)
+                                        <tr>
+                                            <td class="px-4">
+                                                <div class="fw-semibold text-dark">{{ Str::limit($paper->title ?? 'Untitled', 50) }}</div>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ $paper->user->name ?? 'N/A' }}</span>
+                                            </td>
+                                            <td>
+                                                @if(isset($paper->categories) && $paper->categories->count() > 0)
+                                                    <span class="badge bg-light text-dark border">
+                                                        {{ $paper->categories->first()->name }}
+                                                    </span>
+                                                    @if($paper->categories->count() > 1)
+                                                        <span class="badge bg-light text-dark border">+{{ $paper->categories->count() - 1 }}</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted small">No category</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-download me-1"></i>{{ $paper->download_count ?? 1 }}
+                                                </span>
+                                            </td>
+                                            <td class="text-muted small">
+                                                {{ isset($paper->last_downloaded_at) ? \Carbon\Carbon::parse($paper->last_downloaded_at)->format('M d, Y H:i') : 'N/A' }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('front.publication.show', ['research' => $paper->slug ?? $paper->id]) }}" 
+                                                        class="btn btn-sm btn-outline-primary" target="_blank">
+                                                        <i class="bi bi-eye me-1"></i>View
+                                                    </a>
+                                                    <a href="{{ URL::signedRoute('front.publication.download', ['research' => $paper->slug ?? $paper->id]) }}" 
+                                                        class="btn btn-sm btn-outline-success">
+                                                        <i class="bi bi-download me-1"></i>Download
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">
+                                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                                No downloads yet. Download papers to see them here!
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-    </div>
-
-</div>
-@endrole
+        @endrole
 
 
 

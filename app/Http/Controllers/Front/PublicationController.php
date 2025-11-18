@@ -23,6 +23,17 @@ class PublicationController extends Controller
                 $research->increment('downloads');
                 $research->increment('views');
 
+                // Track download in session for authenticated users
+                if (auth()->check()) {
+                    $downloads = session()->get('downloaded_papers', []);
+                    if (!isset($downloads[$research->id])) {
+                        $downloads[$research->id] = ['count' => 0, 'last_downloaded' => null];
+                    }
+                    $downloads[$research->id]['count']++;
+                    $downloads[$research->id]['last_downloaded'] = now()->toDateTimeString();
+                    session()->put('downloaded_papers', $downloads);
+                }
+
                 $localPath = $media->getPath();
                 if (!empty($localPath) && file_exists($localPath)) {
                     return response()->download($localPath, $media->file_name ?: basename($localPath));
@@ -43,6 +54,17 @@ class PublicationController extends Controller
 
         // Increment views
         $research->increment('views');
+
+        // Track view in session for authenticated users
+        if (auth()->check()) {
+            $views = session()->get('viewed_papers', []);
+            if (!isset($views[$research->id])) {
+                $views[$research->id] = ['count' => 0, 'last_viewed' => null];
+            }
+            $views[$research->id]['count']++;
+            $views[$research->id]['last_viewed'] = now()->toDateTimeString();
+            session()->put('viewed_papers', $views);
+        }
 
         return view('front.publication', compact('research'));
     }
@@ -67,6 +89,17 @@ class PublicationController extends Controller
         }
 
         $research->increment('downloads');
+
+        // Track download in session for authenticated users
+        if (auth()->check()) {
+            $downloads = session()->get('downloaded_papers', []);
+            if (!isset($downloads[$research->id])) {
+                $downloads[$research->id] = ['count' => 0, 'last_downloaded' => null];
+            }
+            $downloads[$research->id]['count']++;
+            $downloads[$research->id]['last_downloaded'] = now()->toDateTimeString();
+            session()->put('downloaded_papers', $downloads);
+        }
 
         $localPath = $media->getPath();
         if (!empty($localPath) && file_exists($localPath)) {

@@ -125,15 +125,19 @@ class DashboardController extends Controller
 // USER DASHBOARD
 if ($user->hasRole('User')) {
 
+    // Get user's personal activity from session
+    $viewedPapers = session()->get('viewed_papers', []);
+    $downloadedPapers = session()->get('downloaded_papers', []);
+    
     // Stats
     $data = [
-        'bookmarks' => $user->bookmarks()->count(),
-        'downloads' => Research::where('status', 'approved')->sum('downloads'),
-        'papersViewed' => Research::where('status', 'approved')->count(),
+        'bookmarks' => \App\Models\Bookmark::where('user_id', $user->id)->count(),
+        'downloads' => count($downloadedPapers),
+        'papersViewed' => count($viewedPapers),
     ];
 
     // Base query for search/explore
-    $query = Research::with(['author', 'categories'])->where('status', 'approved');
+    $query = Research::whereIn('status', ['published', 'approved']);
 
     // Search
     if ($request->filled('search')) {
@@ -156,9 +160,45 @@ if ($user->hasRole('User')) {
     $researches = $query->latest()->paginate(10);
     $categories = Category::all();
 
-    // Most Viewed / Trending
-    $chartData['mostViewed'] = Research::where('status', 'approved')
-        ->orderBy('views', 'desc')->take(5)->get();
+    // Initialize chartData
+    $chartData = [
+        'mostViewed' => collect([]),
+        'myDownloads' => collect([])
+    ];
+
+    // Get user's most viewed papers from session with full details
+    $viewedPaperIds = array_keys($viewedPapers);
+    if (!empty($viewedPaperIds)) {
+        $viewedResearches = Research::with('user')
+            ->whereIn('id', $viewedPaperIds)
+            ->whereIn('status', ['published', 'approved'])
+            ->get();
+        
+        $chartData['mostViewed'] = $viewedResearches->map(function ($paper) use ($viewedPapers) {
+            $paper->user_views = $viewedPapers[$paper->id]['count'] ?? 1;
+            $paper->last_viewed_at = $viewedPapers[$paper->id]['last_viewed'] ?? now();
+            // Load categories manually (it's not an Eloquent relationship)
+            $paper->categories = $paper->categories();
+            return $paper;
+        })->sortByDesc('user_views')->take(10)->values();
+    }
+
+    // Get user's downloaded papers
+    $downloadedPaperIds = array_keys($downloadedPapers);
+    if (!empty($downloadedPaperIds)) {
+        $downloadedResearches = Research::with('user')
+            ->whereIn('id', $downloadedPaperIds)
+            ->whereIn('status', ['published', 'approved'])
+            ->get();
+        
+        $chartData['myDownloads'] = $downloadedResearches->map(function ($paper) use ($downloadedPapers) {
+            $paper->download_count = $downloadedPapers[$paper->id]['count'] ?? 1;
+            $paper->last_downloaded_at = $downloadedPapers[$paper->id]['last_downloaded'] ?? now();
+            // Load categories manually (it's not an Eloquent relationship)
+            $paper->categories = $paper->categories();
+            return $paper;
+        })->sortByDesc('download_count')->take(10)->values();
+    }
 
     return view('admin.dashboard', compact(
         'researches',
@@ -168,7 +208,7 @@ if ($user->hasRole('User')) {
 }
 
 // Default for roles without dashboard
-$data['message'] = 'No dashboard configured for your role: ' . $user->getRoleNames()->implode(', ');
+$data['message'] = 'No dashboard configured for your role.';
 return view('admin.dashboard', $data);
     }
 }
