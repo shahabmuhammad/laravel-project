@@ -32,96 +32,64 @@
             @endif
         </div>
 
-        {{--  ADMIN DASHBOARD  --}}
-        @role('Admin')
-            @if (isset($totalPublications))
-                <div class="row stats-row gx-3 gy-3 my-3">
-                    @php
-                        $stats = [
-                            [
-                                'label' => 'Total Publications',
-                                'number' => $totalPublications ?? 0,
-                                'icon' => 'bi-journal-text',
-                                'color' => 'primary',
-                            ],
-                            [
-                                'label' => 'Pending Approvals',
-                                'number' => $pendingApprovals ?? 0,
-                                'icon' => 'bi-clock-history',
-                                'color' => 'warning',
-                            ],
-                            [
-                                'label' => 'Total Downloads',
-                                'number' => number_format($totalDownloads ?? 0),
-                                'icon' => 'bi-download',
-                                'color' => 'success',
-                            ],
-                            [
-                                'label' => 'Total Views',
-                                'number' => number_format($totalViews ?? 0),
-                                'icon' => 'bi-eye',
-                                'color' => 'info',
-                            ],
-                            [
-                                'label' => 'Active Authors',
-                                'number' => $activeAuthors ?? 0,
-                                'icon' => 'bi-people',
-                                'color' => 'secondary',
-                            ],
-                            [
-                                'label' => 'Total Users',
-                                'number' => $totalUsers ?? 0,
-                                'icon' => 'bi-person-check',
-                                'color' => 'dark',
-                            ],
-                        ];
-                    @endphp
-
-                    @foreach ($stats as $item)
-                        <div class="col-md-4 col-lg-2">
-                            <div class="card stat-card shadow-sm border-0 h-100">
-                                <div class="card-body text-center">
-                                    <i class="bi {{ $item['icon'] }} fs-2 text-{{ $item['color'] }} mb-2"></i>
-                                    <div class="stat-number fw-bold">{{ $item['number'] }}</div>
-                                    <div class="stat-label text-muted small">{{ $item['label'] }}</div>
-                                </div>
+         {{--  ADMIN DASHBOARD  --}}
+    @role('Admin')
+        @if (isset($totalPublications))
+            <div class="row stats-row gx-3 gy-3 my-3">
+                @php
+                    $stats = [
+                        ['label' => 'Total Publications', 'number' => $totalPublications ?? 0, 'icon' => 'bi-journal-text', 'color' => 'primary'],
+                        ['label' => 'Pending Approvals', 'number' => $pendingApprovals ?? 0, 'icon' => 'bi-clock-history', 'color' => 'warning'],
+                        ['label' => 'Total Downloads', 'number' => number_format($totalDownloads ?? 0), 'icon' => 'bi-download', 'color' => 'success'],
+                        ['label' => 'Total Views', 'number' => number_format($totalViews ?? 0), 'icon' => 'bi-eye', 'color' => 'info'],
+                        ['label' => 'Active Authors', 'number' => $activeAuthors ?? 0, 'icon' => 'bi-people', 'color' => 'secondary'],
+                        ['label' => 'Total Users', 'number' => $totalUsers ?? 0, 'icon' => 'bi-person-check', 'color' => 'dark'],
+                    ];
+                @endphp
+                @foreach ($stats as $item)
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card shadow-sm border-0 h-100">
+                            <div class="card-body text-center">
+                                <i class="bi {{ $item['icon'] }} fs-2 text-{{ $item['color'] }} mb-2"></i>
+                                <div class="stat-number fw-bold">{{ $item['number'] }}</div>
+                                <div class="stat-label text-muted small">{{ $item['label'] }}</div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
+            </div>
 
                 {{-- Charts Row --}}
-                <div class="row gx-3 gy-3 align-items-stretch mb-4">
-                    <div class="col-lg-8">
-                        <div class="card chart-card p-4 shadow-sm border-0 h-100">
-                            <h6 class="card-title mb-3 fw-bold"><i class="bi bi-graph-up me-2"></i>Research Submissions Trend
-                                (Last 6 Months)</h6>
-                            <div style="height:280px"><canvas id="monthlyTrendChart"></canvas></div>
-                        </div>
-                    </div>
-                    <div class="col-l">
-                        <div class="card chart-card p-4 shadow-sm border-0 h-100">
-                            <h6 class="card-title mb-3 fw-bold"><i class="bi bi-pie-chart me-2"></i>Research by Status</h6>
-                            <div style="height:280px"><canvas id="statusPieChart"></canvas></div>
-                        </div>
+            <div class="row gx-3 gy-3 align-items-stretch mb-4">
+                <div class="col-lg-8">
+                    <div class="card chart-card p-4 shadow-sm border-0 h-100">
+                        <h6 class="card-title mb-3 fw-bold"><i class="bi bi-graph-up me-2"></i>Research Submissions Trend (Last 6 Months)</h6>
+                        <div style="height:280px"><canvas id="monthlyTrendChart"></canvas></div>
                     </div>
                 </div>
+                <div class="col-lg-4">
+                    <div class="card chart-card p-4 shadow-sm border-0 h-100">
+                        <h6 class="card-title mb-3 fw-bold"><i class="bi bi-pie-chart me-2"></i>Research by Status</h6>
+                        <div style="height:280px"><canvas id="statusPieChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
 
-                {{-- Second Charts Row --}}
-                <div class="row gx-3 gy-3 align-items-stretch mb-4">
-                    <div class="col-lg-6">
-                        <div class="card chart-card p-4 shadow-sm border-0 h-100">
-                            <h6 class="card-title mb-3 fw-bold"><i class="bi bi-bar-chart me-2"></i>Top 5 Categories</h6>
-                            <div style="height:280px"><canvas id="categoryBarChart"></canvas></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card chart-card p-4 shadow-sm border-0 h-100">
-                            <h6 class="card-title mb-3 fw-bold"><i class="bi bi-trophy me-2"></i>Most Downloaded Research</h6>
-                            <div style="height:280px"><canvas id="downloadBarChart"></canvas></div>
-                        </div>
+                 {{-- Second Charts Row --}}
+            <div class="row gx-3 gy-3 align-items-stretch mb-4">
+                <div class="col-lg-6">
+                    <div class="card chart-card p-4 shadow-sm border-0 h-100">
+                        <h6 class="card-title mb-3 fw-bold"><i class="bi bi-bar-chart me-2"></i>Top 5 Categories</h6>
+                        <div style="height:280px"><canvas id="categoryBarChart"></canvas></div>
                     </div>
                 </div>
+                     <div class="col-lg-6">
+                    <div class="card chart-card p-4 shadow-sm border-0 h-100">
+                        <h6 class="card-title mb-3 fw-bold"><i class="bi bi-trophy me-2"></i>Most Downloaded Research</h6>
+                        <div style="height:280px"><canvas id="downloadBarChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
 
                 {{-- Recent Submissions Table --}}
                 <div class="card p-4 shadow-sm border-0">
@@ -135,8 +103,8 @@
                                     <th>Status</th>
                                     <th>Downloads</th>
                                     <th>Views</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
+                                    <th>Published Date</th>
+                              
                                 </tr>
                             </thead>
                             <tbody>
@@ -164,12 +132,12 @@
                                         <td><span class="badge bg-light text-dark"><i class="bi bi-eye"></i>
                                                 {{ number_format($item->views ?? 0) }}</span></td>
                                         <td class="text-muted small">{{ $item->created_at->format('M d, Y') }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <a href="{{ route('admin.researches.show', encrypt($item->id)) }}"
                                                 class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-eye"></i> View
                                             </a>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @empty
                                     <tr>
@@ -182,7 +150,7 @@
                 </div>
 
                 {{-- Most Viewed Research --}}
-                <div class="card p-4 shadow-sm border-0 mt-4">
+                {{-- <div class="card p-4 shadow-sm border-0 mt-4">
                     <h6 class="mb-3 fw-bold"><i class="bi bi-eye-fill me-2"></i>Most Viewed Research Papers</h6>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
@@ -193,7 +161,7 @@
                                     <th>Author</th>
                                     <th>Views</th>
                                     <th>Downloads</th>
-                                    <th>Published</th>
+                                    <th>Viewed Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -216,7 +184,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
             @else
                 <div class="alert alert-warning">
                     <strong>No data available.</strong> Admin statistics are not loading. Please check that you're logged in as
@@ -449,357 +417,200 @@
                     </div>
                 </div>
 
-                {{-- My Downloads --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light border-0 py-3">
-                        <h6 class="mb-0 fw-bold"><i class="bi bi-download me-2"></i>My Downloaded Papers</h6>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="px-4">Title</th>
-                                        <th>Author</th>
-                                        <th>Category</th>
-                                        <th>Times Downloaded</th>
-                                        <th>Last Downloaded</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($chartData['myDownloads'] ?? [] as $paper)
-                                        <tr>
-                                            <td class="px-4">
-                                                <div class="fw-semibold text-dark">{{ Str::limit($paper->title ?? 'Untitled', 50) }}</div>
-                                            </td>
-                                            <td>
-                                                <span class="text-muted">{{ $paper->user->name ?? 'N/A' }}</span>
-                                            </td>
-                                            <td>
-                                                @if(isset($paper->categories) && $paper->categories->count() > 0)
-                                                    <span class="badge bg-light text-dark border">
-                                                        {{ $paper->categories->first()->name }}
-                                                    </span>
-                                                    @if($paper->categories->count() > 1)
-                                                        <span class="badge bg-light text-dark border">+{{ $paper->categories->count() - 1 }}</span>
-                                                    @endif
-                                                @else
-                                                    <span class="text-muted small">No category</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success">
-                                                    <i class="bi bi-download me-1"></i>{{ $paper->download_count ?? 1 }}
-                                                </span>
-                                            </td>
-                                            <td class="text-muted small">
-                                                {{ isset($paper->last_downloaded_at) ? \Carbon\Carbon::parse($paper->last_downloaded_at)->format('M d, Y H:i') : 'N/A' }}
-                                            </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('front.publication.show', ['research' => $paper->slug ?? $paper->id]) }}" 
-                                                        class="btn btn-sm btn-outline-primary" target="_blank">
-                                                        <i class="bi bi-eye me-1"></i>View
-                                                    </a>
-                                                    <a href="{{ URL::signedRoute('front.publication.download', ['research' => $paper->slug ?? $paper->id]) }}" 
-                                                        class="btn btn-sm btn-outline-success">
-                                                        <i class="bi bi-download me-1"></i>Download
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">
-                                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                                                No downloads yet. Download papers to see them here!
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    
+        {{-- Bookmarks & Downloads --}}
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-light border-0 py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-download me-2"></i>My Downloaded Papers</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Times Downloaded</th>
+                                <th>Last Downloaded</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($chartData['myDownloads'] ?? [] as $paper)
+                                <tr>
+                                    <td>{{ Str::limit($paper->title ?? 'Untitled', 50) }}</td>
+                                    <td>{{ $paper->user->name ?? 'N/A' }}</td>
+                                    <td>
+                                        @if($paper->categories->count() > 0)
+                                            <span class="badge bg-light text-dark border">{{ $paper->categories->first()->name }}</span>
+                                            @if($paper->categories->count() > 1)
+                                                <span class="badge bg-light text-dark border">+{{ $paper->categories->count() - 1 }}</span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted small">No category</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $paper->download_count ?? 1 }}</td>
+                                    <td>{{ $paper->last_downloaded_at ? \Carbon\Carbon::parse($paper->last_downloaded_at)->format('M d, Y H:i') : 'N/A' }}</td>
+                                    <td>
+                                        <button class="btn btn-sm bookmark-btn" data-id="{{ $paper->id }}" style="border:none;background:transparent;">
+                                            @if(auth()->user()->bookmarks()->where('research_id',$paper->id)->exists())
+                                                <i class="bi bi-bookmark-fill text-primary fs-5"></i>
+                                            @else
+                                                <i class="bi bi-bookmark text-muted fs-5"></i>
+                                            @endif
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>No papers found!
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
-        @endrole
+        </div>
+    @endrole
 
-
-
-        @if (isset($message))
-            <div class="alert alert-info mt-4">
-                {{ $message }}
-            </div>
-        @endif
-
-    </div>
+</div>
 @endsection
 
 @push('scripts')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log('Dashboard scripts loaded');
-
-            @role('Admin')
-                console.log('User has Admin role');
-                // ===== Monthly Trend Chart (Line Chart) =====
-                const monthlyTrendCtx = document.getElementById("monthlyTrendChart");
-                console.log('Monthly chart canvas:', monthlyTrendCtx);
-                if (monthlyTrendCtx) {
-                    @php
-                        $monthLabels = isset($monthlyData) ? $monthlyData->pluck('month')->toArray() : ['No Data'];
-                        $monthCounts = isset($monthlyData) ? $monthlyData->pluck('count')->toArray() : [0];
-                    @endphp
-                    console.log('Chart data - Labels:', @json($monthLabels), 'Counts:',
-                        @json($monthCounts));
-                    new Chart(monthlyTrendCtx, {
-                        type: "line",
-                        data: {
-                            labels: @json($monthLabels),
-                            datasets: [{
-                                label: "Research Submissions",
-                                data: @json($monthCounts),
-                                backgroundColor: "rgba(46, 123, 214, 0.1)",
-                                borderColor: "#2e7bd6",
-                                borderWidth: 3,
-                                fill: true,
-                                tension: 0.4,
-                                pointBackgroundColor: "#2e7bd6",
-                                pointBorderColor: "#fff",
-                                pointBorderWidth: 2,
-                                pointRadius: 5,
-                                pointHoverRadius: 7
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(0,0,0,0.8)',
-                                    padding: 12,
-                                    titleFont: {
-                                        size: 14
-                                    },
-                                    bodyFont: {
-                                        size: 13
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        precision: 0,
-                                        font: {
-                                            size: 12
-                                        }
-                                    },
-                                    grid: {
-                                        color: 'rgba(0,0,0,0.05)'
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        font: {
-                                            size: 12
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Bookmark toggle
+    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const icon = this.querySelector('i');
+            fetch("{{ url('admin/bookmark/toggle') }}/" + id, {
+                method: "POST",
+                headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}", "Accept": "application/json" }
+            }).then(res => res.json()).then(data => {
+                if (icon.classList.contains('bi-bookmark')) {
+                    icon.classList.remove('bi-bookmark', 'text-muted');
+                    icon.classList.add('bi-bookmark-fill', 'text-primary');
+                } else {
+                    icon.classList.remove('bi-bookmark-fill', 'text-primary');
+                    icon.classList.add('bi-bookmark', 'text-muted');
                 }
-
-                // ===== Status Pie Chart =====
-                const statusPieCtx = document.getElementById("statusPieChart");
-                if (statusPieCtx) {
-                    @php
-                        $statusData = $researchByStatus ?? [];
-                    @endphp
-                    new Chart(statusPieCtx, {
-                        type: "doughnut",
-                        data: {
-                            labels: ['Published', 'Draft', 'Submitted', 'Rejected'],
-                            datasets: [{
-                                data: [
-                                    {{ $statusData['published'] ?? 0 }},
-                                    {{ $statusData['draft'] ?? 0 }},
-                                    {{ $statusData['submitted'] ?? 0 }},
-                                    {{ $statusData['rejected'] ?? 0 }}
-                                ],
-                                backgroundColor: ['#28a745', '#6c757d', '#ffc107', '#dc3545'],
-                                borderWidth: 2,
-                                borderColor: '#fff'
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                    labels: {
-                                        padding: 15,
-                                        font: {
-                                            size: 12
-                                        },
-                                        usePointStyle: true
-                                    }
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(0,0,0,0.8)',
-                                    padding: 12
-                                }
-                            }
-                        }
-                    });
+                console.log(data.message);
+            });
+        });
+    });
+           @role('Admin')
+        const monthlyTrendCtx = document.getElementById("monthlyTrendChart");
+        if (monthlyTrendCtx) {
+            new Chart(monthlyTrendCtx, {
+                type: "line",
+                data: {
+                    labels: @json($monthlyData->pluck('month')->toArray() ?? []),
+                    datasets: [{
+                        label: "Research Submissions",
+                        data: @json($monthlyData->pluck('count')->toArray() ?? []),
+                        backgroundColor: "rgba(46, 123, 214, 0.1)",
+                        borderColor: "#2e7bd6",
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: "#2e7bd6",
+                        pointBorderColor: "#fff",
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true, position: 'top' } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
                 }
+            });
+        }
 
-                // ===== Top Categories Bar Chart =====
-                const categoryBarCtx = document.getElementById("categoryBarChart");
-                if (categoryBarCtx) {
-                    @php
-                        $categoryNames = isset($topCategories) ? $topCategories->pluck('name')->toArray() : [];
-                        $categoryCounts = isset($topCategories) ? $topCategories->pluck('researches_count')->toArray() : [];
-                    @endphp
-                    new Chart(categoryBarCtx, {
-                        type: "bar",
-                        data: {
-                            labels: @json($categoryNames),
-                            datasets: [{
-                                label: "Number of Research Papers",
-                                data: @json($categoryCounts),
-                                backgroundColor: [
-                                    'rgba(46, 123, 214, 0.8)',
-                                    'rgba(31, 180, 138, 0.8)',
-                                    'rgba(244, 162, 97, 0.8)',
-                                    'rgba(255, 99, 132, 0.8)',
-                                    'rgba(153, 102, 255, 0.8)'
-                                ],
-                                borderColor: [
-                                    '#2e7bd6',
-                                    '#1fb48a',
-                                    '#f4a261',
-                                    '#ff6384',
-                                    '#9966ff'
-                                ],
-                                borderWidth: 2,
-                                borderRadius: 8,
-                                barThickness: 50
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(0,0,0,0.8)',
-                                    padding: 12
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        precision: 0,
-                                        font: {
-                                            size: 12
-                                        }
-                                    },
-                                    grid: {
-                                        color: 'rgba(0,0,0,0.05)'
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        font: {
-                                            size: 11
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
+        const statusPieCtx = document.getElementById("statusPieChart");
+        if (statusPieCtx) {
+            new Chart(statusPieCtx, {
+                type: "doughnut",
+                data: {
+                    labels: ['Published', 'Draft', 'Submitted', 'Rejected'],
+                    datasets: [{
+                        data: [
+                            {{ $researchByStatus['published'] ?? 0 }},
+                            {{ $researchByStatus['draft'] ?? 0 }},
+                            {{ $researchByStatus['submitted'] ?? 0 }},
+                            {{ $researchByStatus['rejected'] ?? 0 }}
+                        ],
+                        backgroundColor: ['#28a745', '#6c757d', '#ffc107', '#dc3545'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
 
-                // ===== Most Downloaded Research Bar Chart =====
-                const downloadBarCtx = document.getElementById("downloadBarChart");
-                if (downloadBarCtx) {
-                    @php
-                        $downloadTitles = isset($mostDownloaded) ? $mostDownloaded->map(fn($r) => Str::limit($r->title, 25))->toArray() : [];
-                        $downloadCounts = isset($mostDownloaded) ? $mostDownloaded->pluck('downloads')->toArray() : [];
-                    @endphp
-                    new Chart(downloadBarCtx, {
-                        type: "bar",
-                        data: {
-                            labels: @json($downloadTitles),
-                            datasets: [{
-                                label: "Downloads",
-                                data: @json($downloadCounts),
-                                backgroundColor: 'rgba(40, 167, 69, 0.8)',
-                                borderColor: '#28a745',
-                                borderWidth: 2,
-                                borderRadius: 8,
-                                barThickness: 40
-                            }]
-                        },
-                        options: {
-                            indexAxis: 'y', // Horizontal bar
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(0,0,0,0.8)',
-                                    padding: 12
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        precision: 0,
-                                        font: {
-                                            size: 12
-                                        }
-                                    },
-                                    grid: {
-                                        color: 'rgba(0,0,0,0.05)'
-                                    }
-                                },
-                                y: {
-                                    grid: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        font: {
-                                            size: 10
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            @endrole
+        const categoryBarCtx = document.getElementById("categoryBarChart");
+        if (categoryBarCtx) {
+            new Chart(categoryBarCtx, {
+                type: "bar",
+                data: {
+                    labels: @json($topCategories->pluck('name')->toArray() ?? []),
+                    datasets: [{
+                        label: "Number of Research Papers",
+                        data: @json($topCategories->pluck('researches_count')->toArray() ?? []),
+                        backgroundColor: [
+                            'rgba(46, 123, 214, 0.8)',
+                            'rgba(31, 180, 138, 0.8)',
+                            'rgba(244, 162, 97, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            '#2e7bd6',
+                            '#1fb48a',
+                            '#f4a261',
+                            '#ff6384',
+                            '#9966ff'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barThickness: 50
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        const downloadBarCtx = document.getElementById("downloadBarChart");
+        if (downloadBarCtx) {
+            new Chart(downloadBarCtx, {
+                type: "bar",
+                data: {
+                    labels: @json($mostDownloaded->map(fn($r)=>Str::limit($r->title,25))->toArray() ?? []),
+                    datasets: [{
+                        label: "Downloads",
+                        data: @json($mostDownloaded->pluck('downloads')->toArray() ?? []),
+                        backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                        borderColor: '#28a745',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barThickness: 40
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y' }
+            });
+        }
+    @endrole
 
             // Author Dashboard Charts (keeping existing)
             @role('Author')

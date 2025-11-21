@@ -55,7 +55,8 @@
 
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
-                        <i class="bi bi-people-fill text-warning d-block mb-3"></i>
+                          <img src="{{asset('build/front/assets/images/icon1.png')}}" alt="Users" style="width:40px; height:40px;">
+                   {{-- <i class="bi bi-people-fill fs-1 text-danger"></i> --}}
                         <h4 class="fw-bold">{{ number_format($totalUsers) }}</h4>
                         <p class="text-muted mb-0">Total Users</p>
                     </div>
@@ -63,7 +64,8 @@
 
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
-                        <i class="bi bi-journal-text text-primary d-block mb-3"></i>
+                     {{-- <i class="bi bi-journal-text fs-1 text-warning"></i> --}}
+                      <img src="{{asset('build/front/assets/images/icon2.png')}}" alt="Publications" style="width:40px; height:40px;">
                         <h4 class="fw-bold">{{ number_format($totalPublications) }}</h4>
                         <p class="text-muted mb-0">Total Publications</p>
                     </div>
@@ -71,7 +73,8 @@
 
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
-                        <i class="bi bi-person-badge text-success d-block mb-3"></i>
+                        {{-- <i class="bi bi-person-badge-fill fs-1 text-success"></i> --}}
+                         <img src="{{asset('build/front/assets/images/icon3.png')}}" alt="Registered"style="width:40px; height:40px;">
                         <h4 class="fw-bold">{{ number_format($totalRegistered) }}</h4>
                         <p class="text-muted mb-0">Total Registered</p>
                     </div>
@@ -187,42 +190,111 @@
 
         </div>
     </section>
+  <!-- ===== KEY FEATURES ===== -->
+  <section class="features py-5 bg-light">
+  <div class="container text-center">
+    <h4 class="fw-bold mb-4 text-start">Key Features</h4>
 
-    <!-- EXPLORE BY FIELD -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="mb-4">
-                <h4 class="fw-bold mb-2">Explore by Field</h4>
-                <p class="text-muted">Discover popular research areas.</p>
-            </div>
+    <div class="row g-4">
 
-            <div class="row ">
-                @foreach ($categories as $key => $category)
-                    @php
-                        $ext = $key % 12 < 6 ? 'jpg' : 'png';
-                        $imgNumber = ($key % 12) + 1;
-                    @endphp
+      <!-- Feature 1 -->
+      <div class="col-md-3">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+          <i class="bi bi-search fs-1 text-warning mb-3"></i>
 
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="field-card p-4 bg-white rounded shadow-sm text-center h-100">
-                            <img src="{{ asset('build/front/assets/images/field' . $imgNumber . '.' . $ext) }}"
-                                class="field-img mx-auto" alt="{{ $category->name }}" loading="lazy">
-
-                            <h6 class="field-title">{{ $category->name }}</h6>
-                            <p class="small text-muted mb-0">
-                                {{ Str::limit($category->description ?? 'Explore this field.', 60) }}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="text-center mt-4">
-                <a href="{{ route('front.view-category') }}" class="btn btn-link text-primary fw-semibold">
-                    View All Categories <i class="bi bi-arrow-right ms-1"></i>
-                </a>
-            </div>
+          <h6 class="fw-bold mt-3">Easy Search & Filter</h6>
+          <p class="small text-muted">Find relevant research papers smartly.</p>
         </div>
-    </section>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="col-md-3">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+          <i class="bi bi-people fs-1 text-success mb-3"></i>
+
+          <h6 class="fw-bold mt-3">Academic Network</h6>
+          <p class="small text-muted">Connect with global researchers.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="col-md-3">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+       <i class="bi bi-file-earmark-arrow-down fs-1 mb-3" 
+   style="color:#FFC107; text-shadow: 1px 1px 2px #ffffff;"></i>
+
+
+          <h6 class="fw-bold mt-3">Downloads & Citations</h6>
+          <p class="small text-muted">Get insights at a glance.</p>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="col-md-3">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+          <i class="bi bi-globe fs-1 mb-3" style="color:#0D3B66;"></i>
+
+          <h6 class="fw-bold mt-3">Open Access</h6>
+          <p class="small text-muted">Access research across all disciplines.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <a href="{{ route('front.key-features') }}" class="btn btn-link text-primary fw-semibold mt-4">
+      Find out more →
+    </a>
+  </div>
+</section>
+<!-- ===== EXPLORE BY FIELD ===== -->
+<section class="explore-section py-5">
+    <div class="container">
+        <h3 class="fw-bold mb-2 text-start">Explore by Field</h3>
+        <p class="section-desc mb-5 text-start">
+            Discover popular research areas and dive into topics that interest you most.
+        </p>
+
+        <div class="row g-4">
+            @foreach($categories as $key => $category)
+                @php
+                    $ext = ($key % 12) < 6 ? 'jpg' : 'png';
+                    $imgNumber = ($key % 12) + 1;
+                @endphp
+
+                <div class="col-md-4 col-sm-6 d-flex justify-content-start">
+                    <div class="explore-box bg-white text-center rounded shadow-sm p-3"
+                         style="width: 331px; height: 206px; border-radius: 10px; box-shadow: 0px 0px 3px rgba(0,0,0,0.25); transition: transform 0.3s, box-shadow 0.3s;">
+                        
+                        <img src="{{ asset('build/front/assets/images/field' . $imgNumber . '.' . $ext) }}"
+                             class="img-fluid mb-2"
+                             style="max-width: 80px;"
+                             alt="{{ $category->name }}">
+
+                        <h6 class="fw-bold mb-1">{{ $category->name }}</h6>
+                        <p class="small text-muted mb-0">{{ $category->description ?? 'Explore this field.' }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="{{ route('front.view-category') }}" class="btn btn-link text-primary fw-semibold">
+                View All Categories →
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+.explore-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+</style>
+
+
+
+
 
     <!-- ABOUT SECTION -->
     <section class="about py-5 bg-light">
@@ -253,7 +325,7 @@
             <div class="col-lg-6 ps-lg-5 mt-4 mt-lg-0">
                 <h5 class="fw-bold">Join Our Research Community</h5>
                 <p class="text-muted">
-                    Be part of a growing network of authors, reviewers, and readers.
+                 Be part of a growing network of authors, reviewers, and readers who make research accessible to everyone.
                 </p>
             </div>
         </div>

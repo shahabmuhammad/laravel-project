@@ -77,6 +77,7 @@ class DashboardController extends Controller
                 ->orderBy('views', 'desc')
                 ->take(5)
                 ->get();
+                
 
             $data = [
                 'totalPublications' => $totalPublications,

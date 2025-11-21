@@ -31,4 +31,3 @@ class BookmarkController extends Controller
         return response()->json(['message' => $message]);
     }
 }
-

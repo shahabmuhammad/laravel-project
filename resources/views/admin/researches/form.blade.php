@@ -33,25 +33,25 @@
             @endforeach
         </select>
     </div>
-      <div class="row g-2 mt-2">
-        {{-- Publisher --}}
-        <div class="col-md-6">
-            <label for="publisher_id" class="form-label fw-bold">Publisher</label>
-            <select name="publisher_id" id="publisher_id" class="form-select" style="height:36px; font-size:16px;">
-                <option value="">Select Publisher</option>
-                @foreach ($publishers as $p)
-                    <option value="{{ $p->id }}"
-                        {{ old('publisher_id', $research->publisher_id ?? '') == $p->id ? 'selected' : '' }}>
-                        {{ $p->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+ <div class="row g-3 mt-2">
+    {{-- Publisher --}}
+    <div class="col-md-6">
+        <label for="publisher_id" class="form-label fw-bold">Publisher</label>
+        <select name="publisher_id" id="publisher_id" class="form-select" style="height:45px; font-size:16px;">
+            <option value="">Select Publisher</option>
+            @foreach ($publishers as $p)
+                <option value="{{ $p->id }}"
+                    {{ old('publisher_id', $research->publisher_id ?? '') == $p->id ? 'selected' : '' }}>
+                    {{ $p->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
     {{-- Type & File --}}
     <div class="row g-2 mt-2">
         <div class="col-md-6">
             <label for="type_id" class="form-label fw-bold">Type</label>
-            <select name="type_id" id="type_id" class="form-select" style="height:36px; font-size:16px;">
+            <select name="type_id" id="type_id" class="form-select" style="height:45px; font-size:16px;">
                 <option value="">Select Type</option>
                 @foreach ($types as $t)
                     <option value="{{ $t->id }}"
@@ -83,25 +83,24 @@
         </div>
     </div>
 
-    {{-- Status --}}
-   
-    <div class="mb-3 mt-2">
-        <label for="status" class="form-label fw-bold">Status</label>
-        <select name="status" id="status" class="form-select" style="height:36px; font-size:16px;">
-            @if (auth()->user()->hasRole('Admin'))
-                {{-- Admin can select all statuses --}}
-                @foreach (['draft', 'submitted', 'published', 'rejected'] as $status)
-                    <option value="{{ $status }}"
-                        {{ old('status', $research->status ?? '') == $status ? 'selected' : '' }}>
-                        {{ ucfirst($status) }}
-                    </option>
-                @endforeach
-            @else
-                {{-- Author can only select submitted --}}
-                <option value="submitted" selected>Submitted</option>
-            @endif
-        </select>
-    </div>
+  {{-- Status --}}
+<div class="mb-3 mt-3">
+    <label for="status" class="form-label fw-bold">Status</label>
+    <select name="status" id="status" class="form-select" style="height:45px; font-size:16px;">
+        @if (auth()->user()->hasRole('Admin'))
+            {{-- Admin can select all statuses --}}
+            @foreach (['draft', 'submitted', 'published', 'rejected'] as $status)
+                <option value="{{ $status }}"
+                    {{ old('status', $research->status ?? '') == $status ? 'selected' : '' }}>
+                    {{ ucfirst($status) }}
+                </option>
+            @endforeach
+        @else
+            {{-- Author can only select submitted --}}
+            <option value="submitted" selected>Submitted</option>
+        @endif
+    </select>
+</div>
 
 
     {{-- Buttons --}}
