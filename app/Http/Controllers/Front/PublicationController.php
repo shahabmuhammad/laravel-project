@@ -16,42 +16,6 @@ class PublicationController extends Controller
         // Load related models
         $research->load('user', 'publisher', 'type');
 
-        // Handle file download request
-        if (request()->query('download')) {
-            $media = $research->getFirstMedia('research_files');
-            if ($media instanceof Media) {
-                $research->increment('downloads');
-                $research->increment('views');
-
-                // Track download in session for authenticated users
-                if (auth()->check()) {
-                    $downloads = session()->get('downloaded_papers', []);
-                    if (!isset($downloads[$research->id])) {
-                        $downloads[$research->id] = ['count' => 0, 'last_downloaded' => null];
-                    }
-                    $downloads[$research->id]['count']++;
-                    $downloads[$research->id]['last_downloaded'] = now()->toDateTimeString();
-                    session()->put('downloaded_papers', $downloads);
-                }
-
-                $localPath = $media->getPath();
-                if (!empty($localPath) && file_exists($localPath)) {
-                    return response()->download($localPath, $media->file_name ?: basename($localPath));
-                }
-
-                $disk = $media->disk;
-                $relative = $media->getPathRelativeToRoot();
-
-                if ($relative && Storage::disk($disk)->exists($relative)) {
-                    return Storage::disk($disk)->download($relative, $media->file_name ?: basename($relative));
-                }
-
-                return redirect($media->getFullUrl());
-            }
-
-            return back()->with('error', 'No file available for download.');
-        }
-
         // Increment views
         $research->increment('views');
 

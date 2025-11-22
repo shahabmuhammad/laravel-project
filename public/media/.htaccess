@@ -1,0 +1,16 @@
+# Block all direct access to media files
+# Files can only be accessed through authenticated routes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect all requests to login page
+    RewriteCond %{REQUEST_URI} !^/login
+    RewriteRule ^(.*)$ /login [R=302,L]
+</IfModule>
+
+# Alternative: Deny all access
+<IfModule !mod_rewrite.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

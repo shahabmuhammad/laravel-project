@@ -71,7 +71,8 @@ class Research extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        // store research files on the public `media` disk (public/media)
-        $this->addMediaCollection('research_files')->useDisk('media');
+        // Store research files in private storage (storage/app/media)
+        // Files cannot be accessed directly via URL - must go through controller
+        $this->addMediaCollection('research_files')->useDisk('media_private');
     }
 }

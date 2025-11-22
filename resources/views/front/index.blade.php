@@ -55,8 +55,9 @@
 
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
-                          <img src="{{asset('build/front/assets/images/icon1.png')}}" alt="Users" style="width:40px; height:40px;">
-                   {{-- <i class="bi bi-people-fill fs-1 text-danger"></i> --}}
+                        <img src="{{ asset('build/front/assets/images/icon1.png') }}" alt="Users"
+                            style="width:40px; height:40px;">
+                        {{-- <i class="bi bi-people-fill fs-1 text-danger"></i> --}}
                         <h4 class="fw-bold">{{ number_format($totalUsers) }}</h4>
                         <p class="text-muted mb-0">Total Users</p>
                     </div>
@@ -64,8 +65,9 @@
 
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
-                     {{-- <i class="bi bi-journal-text fs-1 text-warning"></i> --}}
-                      <img src="{{asset('build/front/assets/images/icon2.png')}}" alt="Publications" style="width:40px; height:40px;">
+                        {{-- <i class="bi bi-journal-text fs-1 text-warning"></i> --}}
+                        <img src="{{ asset('build/front/assets/images/icon2.png') }}" alt="Publications"
+                            style="width:40px; height:40px;">
                         <h4 class="fw-bold">{{ number_format($totalPublications) }}</h4>
                         <p class="text-muted mb-0">Total Publications</p>
                     </div>
@@ -74,7 +76,8 @@
                 <div class="col-6 col-md-3 col-l mx-auto">
                     <div class="text-center">
                         {{-- <i class="bi bi-person-badge-fill fs-1 text-success"></i> --}}
-                         <img src="{{asset('build/front/assets/images/icon3.png')}}" alt="Registered"style="width:40px; height:40px;">
+                        <img src="{{ asset('build/front/assets/images/icon3.png') }}"
+                            alt="Registered"style="width:40px; height:40px;">
                         <h4 class="fw-bold">{{ number_format($totalRegistered) }}</h4>
                         <p class="text-muted mb-0">Total Registered</p>
                     </div>
@@ -170,9 +173,28 @@
 
                                     <div class="d-flex gap-2 w-100 w-sm-auto">
                                         <a href="{{ route('front.publication.show', ['research' => $item->slug ?? $item->id]) }}"
-                                            class="btn btn-outline-primary btn-sm flex-fill flex-sm-grow-0">View</a>
-                                        <a href="{{ URL::signedRoute('front.publication.download', ['research' => $item->slug ?? $item->id]) }}"
-                                            class="btn btn-outline-success btn-sm flex-fill flex-sm-grow-0">Download</a>
+                                            class="btn btn-outline-primary btn-sm flex-fill flex-sm-grow-0">
+                                            <i class="bi bi-eye me-1"></i>View
+                                        </a>
+                                        @auth
+                                            <button type="button" class="btn btn-outline-secondary btn-sm bookmark-btn"
+                                                data-id="{{ $item->id }}" title="Bookmark">
+                                                @if (auth()->user()->bookmarks()->where('research_id', $item->id)->exists())
+                                                    <i class="bi bi-bookmark-fill"></i>
+                                                @else
+                                                    <i class="bi bi-bookmark"></i>
+                                                @endif
+                                            </button>
+                                        @else
+                                            <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm"
+                                                title="Login to bookmark">
+                                                <i class="bi bi-bookmark"></i>
+                                            </a>
+                                        @endauth
+                                        <a href="{{ route('front.publication.download', ['research' => $item->slug ?? $item->id]) }}"
+                                            class="btn btn-outline-success btn-sm flex-fill flex-sm-grow-0">
+                                            <i class="bi bi-download"></i>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -190,107 +212,105 @@
 
         </div>
     </section>
-  <!-- ===== KEY FEATURES ===== -->
-  <section class="features py-5 bg-light">
-  <div class="container text-center">
-    <h4 class="fw-bold mb-4 text-start">Key Features</h4>
+    <!-- ===== KEY FEATURES ===== -->
+    <section class="features py-5 bg-light">
+        <div class="container text-center">
+            <h4 class="fw-bold mb-4 text-start">Key Features</h4>
 
-    <div class="row g-4">
+            <div class="row g-4">
 
-      <!-- Feature 1 -->
-      <div class="col-md-3">
-        <div class="p-4 bg-white rounded shadow-sm h-100">
-          <i class="bi bi-search fs-1 text-warning mb-3"></i>
+                <!-- Feature 1 -->
+                <div class="col-md-3">
+                    <div class="p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-search fs-1 text-warning mb-3"></i>
 
-          <h6 class="fw-bold mt-3">Easy Search & Filter</h6>
-          <p class="small text-muted">Find relevant research papers smartly.</p>
-        </div>
-      </div>
-
-      <!-- Feature 2 -->
-      <div class="col-md-3">
-        <div class="p-4 bg-white rounded shadow-sm h-100">
-          <i class="bi bi-people fs-1 text-success mb-3"></i>
-
-          <h6 class="fw-bold mt-3">Academic Network</h6>
-          <p class="small text-muted">Connect with global researchers.</p>
-        </div>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="col-md-3">
-        <div class="p-4 bg-white rounded shadow-sm h-100">
-       <i class="bi bi-file-earmark-arrow-down fs-1 mb-3" 
-   style="color:#FFC107; text-shadow: 1px 1px 2px #ffffff;"></i>
-
-
-          <h6 class="fw-bold mt-3">Downloads & Citations</h6>
-          <p class="small text-muted">Get insights at a glance.</p>
-        </div>
-      </div>
-
-      <!-- Feature 4 -->
-      <div class="col-md-3">
-        <div class="p-4 bg-white rounded shadow-sm h-100">
-          <i class="bi bi-globe fs-1 mb-3" style="color:#0D3B66;"></i>
-
-          <h6 class="fw-bold mt-3">Open Access</h6>
-          <p class="small text-muted">Access research across all disciplines.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <a href="{{ route('front.key-features') }}" class="btn btn-link text-primary fw-semibold mt-4">
-      Find out more →
-    </a>
-  </div>
-</section>
-<!-- ===== EXPLORE BY FIELD ===== -->
-<section class="explore-section py-5">
-    <div class="container">
-        <h3 class="fw-bold mb-2 text-start">Explore by Field</h3>
-        <p class="section-desc mb-5 text-start">
-            Discover popular research areas and dive into topics that interest you most.
-        </p>
-
-        <div class="row g-4">
-            @foreach($categories as $key => $category)
-                @php
-                    $ext = ($key % 12) < 6 ? 'jpg' : 'png';
-                    $imgNumber = ($key % 12) + 1;
-                @endphp
-
-                <div class="col-md-4 col-sm-6 d-flex justify-content-start">
-                    <div class="explore-box bg-white text-center rounded shadow-sm p-3"
-                         style="width: 331px; height: 206px; border-radius: 10px; box-shadow: 0px 0px 3px rgba(0,0,0,0.25); transition: transform 0.3s, box-shadow 0.3s;">
-                        
-                        <img src="{{ asset('build/front/assets/images/field' . $imgNumber . '.' . $ext) }}"
-                             class="img-fluid mb-2"
-                             style="max-width: 80px;"
-                             alt="{{ $category->name }}">
-
-                        <h6 class="fw-bold mb-1">{{ $category->name }}</h6>
-                        <p class="small text-muted mb-0">{{ $category->description ?? 'Explore this field.' }}</p>
+                        <h6 class="fw-bold mt-3">Easy Search & Filter</h6>
+                        <p class="small text-muted">Find relevant research papers smartly.</p>
                     </div>
                 </div>
-            @endforeach
-        </div>
 
-        <div class="mt-4 text-center">
-            <a href="{{ route('front.view-category') }}" class="btn btn-link text-primary fw-semibold">
-                View All Categories →
+                <!-- Feature 2 -->
+                <div class="col-md-3">
+                    <div class="p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-people fs-1 text-success mb-3"></i>
+
+                        <h6 class="fw-bold mt-3">Academic Network</h6>
+                        <p class="small text-muted">Connect with global researchers.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-md-3">
+                    <div class="p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-file-earmark-arrow-down fs-1 mb-3"
+                            style="color:#FFC107; text-shadow: 1px 1px 2px #ffffff;"></i>
+
+
+                        <h6 class="fw-bold mt-3">Downloads & Citations</h6>
+                        <p class="small text-muted">Get insights at a glance.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-md-3">
+                    <div class="p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-globe fs-1 mb-3" style="color:#0D3B66;"></i>
+
+                        <h6 class="fw-bold mt-3">Open Access</h6>
+                        <p class="small text-muted">Access research across all disciplines.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="{{ route('front.key-features') }}" class="btn btn-link text-primary fw-semibold mt-4">
+                Find out more →
             </a>
         </div>
-    </div>
-</section>
+    </section>
+    <!-- ===== EXPLORE BY FIELD ===== -->
+    <section class="explore-section py-5">
+        <div class="container">
+            <h3 class="fw-bold mb-2 text-start">Explore by Field</h3>
+            <p class="section-desc mb-5 text-start">
+                Discover popular research areas and dive into topics that interest you most.
+            </p>
 
-<style>
-.explore-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-</style>
+            <div class="row g-4">
+                @foreach ($categories as $key => $category)
+                    @php
+                        $ext = $key % 12 < 6 ? 'jpg' : 'png';
+                        $imgNumber = ($key % 12) + 1;
+                    @endphp
+
+                    <div class="col-md-4 col-sm-6 d-flex justify-content-start">
+                        <div class="explore-box bg-white text-center rounded shadow-sm p-3"
+                            style="width: 331px; height: 206px; border-radius: 10px; box-shadow: 0px 0px 3px rgba(0,0,0,0.25); transition: transform 0.3s, box-shadow 0.3s;">
+
+                            <img src="{{ asset('build/front/assets/images/field' . $imgNumber . '.' . $ext) }}"
+                                class="img-fluid mb-2" style="max-width: 80px;" alt="{{ $category->name }}">
+
+                            <h6 class="fw-bold mb-1">{{ $category->name }}</h6>
+                            <p class="small text-muted mb-0">{{ $category->description ?? 'Explore this field.' }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ route('front.view-category') }}" class="btn btn-link text-primary fw-semibold">
+                    View All Categories →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .explore-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 
 
 
@@ -325,10 +345,58 @@
             <div class="col-lg-6 ps-lg-5 mt-4 mt-lg-0">
                 <h5 class="fw-bold">Join Our Research Community</h5>
                 <p class="text-muted">
-                 Be part of a growing network of authors, reviewers, and readers who make research accessible to everyone.
+                    Be part of a growing network of authors, reviewers, and readers who make research accessible to
+                    everyone.
                 </p>
             </div>
         </div>
     </section>
 
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
+
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    const icon = this.querySelector('i');
+
+                    fetch(`{{ url('/bookmark/toggle') }}/${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken.content,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data.bookmarked) {
+                                icon.className = 'bi bi-bookmark-fill';
+                            } else {
+                                icon.className = 'bi bi-bookmark';
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('Failed to update bookmark. Please try again.');
+                        });
+                });
+            });
+        });
+    </script>
+@endpush

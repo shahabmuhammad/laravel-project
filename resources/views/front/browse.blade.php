@@ -120,9 +120,28 @@
 
                                     <div class="d-flex gap-2 w-100 w-sm-auto">
                                         <a href="{{ route('front.publication.show', ['research' => $item->slug ?? $item->id]) }}"
-                                            class="btn btn-outline-primary btn-sm flex-fill flex-sm-grow-0">View</a>
-                                        <a href="{{ URL::signedRoute('front.publication.download', ['research' => $item->slug ?? $item->id]) }}"
-                                            class="btn btn-outline-success btn-sm flex-fill flex-sm-grow-0">Download</a>
+                                            class="btn btn-outline-primary btn-sm flex-fill flex-sm-grow-0">
+                                            <i class="bi bi-eye me-1"></i>View
+                                        </a>
+                                        @auth
+                                            <button type="button" class="btn btn-outline-secondary btn-sm bookmark-btn"
+                                                data-id="{{ $item->id }}" title="Bookmark">
+                                                @if (auth()->user()->bookmarks()->where('research_id', $item->id)->exists())
+                                                    <i class="bi bi-bookmark-fill"></i>
+                                                @else
+                                                    <i class="bi bi-bookmark"></i>
+                                                @endif
+                                            </button>
+                                        @else
+                                            <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm"
+                                                title="Login to bookmark">
+                                                <i class="bi bi-bookmark"></i>
+                                            </a>
+                                        @endauth
+                                        <a href="{{ route('front.publication.download', ['research' => $item->slug ?? $item->id]) }}"
+                                            class="btn btn-outline-success btn-sm flex-fill flex-sm-grow-0">
+                                            <i class="bi bi-download"></i>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -135,3 +154,50 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
+
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    const icon = this.querySelector('i');
+
+                    fetch(`{{ url('/bookmark/toggle') }}/${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken.content,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data.bookmarked) {
+                                icon.className = 'bi bi-bookmark-fill';
+                            } else {
+                                icon.className = 'bi bi-bookmark';
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('Failed to update bookmark. Please try again.');
+                        });
+                });
+            });
+        });
+    </script>
+@endpush

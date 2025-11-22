@@ -61,7 +61,9 @@ return [
 
         'media_private' => [
             'driver' => 'local',
-            'root'   => storage_path() . '/app/media',
+            'root'   => storage_path('app/media'),
+            'visibility' => 'private',
+            // No URL - files are not web-accessible
         ],
 
         'uploads' => [

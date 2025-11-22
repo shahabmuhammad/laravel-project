@@ -27,20 +27,35 @@ Route::get('/key-features', function () {
     return view('front.key-features');
 })->name('front.key-features');
 Route::get('/publications', function () {
-    return view('front.publications'); 
+    return view('front.publications');
 })->name('front.publications');
 //contact
 Route::get('/contact', [ContactController::class, 'index'])->name('front.contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('front.contact.store');
 
-// Publication detail (show full research details) — uses slug binding once migration is applied
-Route::get('/publications/{research}', [\App\Http\Controllers\Front\PublicationController::class, 'show'])
-    ->name('front.publication.show');
-
-// Category filtered publications
+// Category filtered publications (public)
 Route::get('/publications/category/{category}', [\App\Http\Controllers\Front\PublicationController::class, 'category'])
     ->name('front.publications.category');
 
-// Signed download route for publications (protects direct access)
-Route::get('/publications/{research}/download', [\App\Http\Controllers\Front\PublicationController::class, 'download'])
-    ->name('front.publication.download');
+// PROTECTED ROUTES - Require authentication
+Route::middleware('auth')->group(function () {
+    // Publication detail (show full research details) — requires login
+    Route::get('/publications/{research}', [\App\Http\Controllers\Front\PublicationController::class, 'show'])
+        ->name('front.publication.show');
+
+    // Download route for publications (protected)
+    Route::get('/publications/{research}/download', [\App\Http\Controllers\Front\PublicationController::class, 'download'])
+        ->name('front.publication.download');
+
+    // Bookmark routes
+    Route::post('/bookmark/toggle/{research}', [\App\Http\Controllers\Front\BookmarkController::class, 'toggle'])
+        ->name('front.bookmark.toggle');
+    Route::get('/my-bookmarks', [\App\Http\Controllers\Front\BookmarkController::class, 'index'])
+        ->name('front.bookmark.index');
+    Route::delete('/bookmark/remove/{research}', [\App\Http\Controllers\Front\BookmarkController::class, 'remove'])
+        ->name('front.bookmark.remove');
+
+    // My Activity page
+    Route::get('/my-activity', [\App\Http\Controllers\Front\ActivityController::class, 'index'])
+        ->name('front.activity.index');
+});

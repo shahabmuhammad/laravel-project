@@ -9,14 +9,22 @@ use Illuminate\Support\Facades\Auth;
 
 class BookmarkController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $user = Auth::user();
-        $bookmarks = $user->bookmarks()->with(['author', 'publisher', 'type', 'categories'])->latest()->get();
+        $bookmarks = $user->bookmarks()->with(['user', 'publisher', 'type'])->latest()->get();
+
+        // Add categories manually since it's not an Eloquent relationship
+        $bookmarks = $bookmarks->map(function ($paper) {
+            $paper->categories = $paper->categories();
+            return $paper;
+        });
 
         return view('admin.bookmarks.index', compact('bookmarks'));
     }
 
-    public function toggle(Request $request, $researchId) {
+    public function toggle(Request $request, $researchId)
+    {
         $user = Auth::user();
         $research = Research::findOrFail($researchId);
 
