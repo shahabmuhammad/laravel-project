@@ -31,6 +31,6 @@ require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/front.php';
 
-Auth::routes();
+// Removed default Laravel auth routes to avoid name conflicts with custom routes in routes/auth.php
 
 
