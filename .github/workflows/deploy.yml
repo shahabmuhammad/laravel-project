@@ -33,9 +33,10 @@ jobs:
       - name: Install Node deps and build assets
         run: |
           npm config set registry https://registry.npmjs.org/
-          npx npm@latest -v || true
-          # Retry npm ci once if it fails due to transient registry issues
-          (npm ci || (sleep 3 && npm ci))
+          npm cache clean --force
+          # If lockfile has bad tarball URLs, recreate it with Node 20
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
           npm run build
 
       - name: Prepare storage and cache
