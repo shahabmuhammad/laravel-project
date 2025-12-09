@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Composer dependencies
@@ -32,7 +32,10 @@ jobs:
 
       - name: Install Node deps and build assets
         run: |
-          npm ci
+          npm config set registry https://registry.npmjs.org/
+          npx npm@latest -v || true
+          # Retry npm ci once if it fails due to transient registry issues
+          (npm ci || (sleep 3 && npm ci))
           npm run build
 
       - name: Prepare storage and cache
