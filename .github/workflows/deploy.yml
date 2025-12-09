@@ -50,15 +50,16 @@ jobs:
         run: |
           set -e
           mkdir -p deploy
-          # Copy app core
-          rsync -a app bootstrap config vendor routes resources/views storage database/.env.example? deploy/ 2>/dev/null || true
-          rsync -a app deploy/app
-          rsync -a bootstrap deploy/bootstrap
-          rsync -a config deploy/config
-          rsync -a vendor deploy/vendor
-          rsync -a routes deploy/routes
-          rsync -a resources/views deploy/resources/views
-          rsync -a storage deploy/storage
+          # Create base directories explicitly
+          mkdir -p deploy/app deploy/bootstrap deploy/config deploy/vendor deploy/routes deploy/resources deploy/storage deploy/public
+          # Copy core directories
+          rsync -a app/ deploy/app/
+          rsync -a bootstrap/ deploy/bootstrap/
+          rsync -a config/ deploy/config/
+          rsync -a vendor/ deploy/vendor/
+          rsync -a routes/ deploy/routes/
+          rsync -a resources/views/ deploy/resources/views/
+          rsync -a storage/ deploy/storage/
           rsync -a public/ deploy/
           # Ensure storage has correct subfolders
           mkdir -p deploy/storage/app deploy/storage/framework/cache deploy/storage/framework/sessions deploy/storage/framework/views deploy/storage/logs
