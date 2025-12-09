@@ -1,0 +1,161 @@
+name: Deploy to InfinityFree (FTP)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, intl, gd, curl, openssl, pdo_mysql
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+      - name: Install Node deps and build assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare storage and cache
+        run: |
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan optimize
+
+      - name: Prepare deploy directory structure
+        run: |
+          set -e
+          mkdir -p deploy
+          # Copy app core
+          rsync -a app bootstrap config vendor routes resources/views storage database/.env.example? deploy/ 2>/dev/null || true
+          rsync -a app deploy/app
+          rsync -a bootstrap deploy/bootstrap
+          rsync -a config deploy/config
+          rsync -a vendor deploy/vendor
+          rsync -a routes deploy/routes
+          rsync -a resources/views deploy/resources/views
+          rsync -a storage deploy/storage
+          rsync -a public/ deploy/
+          # Ensure storage has correct subfolders
+          mkdir -p deploy/storage/app deploy/storage/framework/cache deploy/storage/framework/sessions deploy/storage/framework/views deploy/storage/logs
+          # Copy environment file if provided via secret
+          if [ -n "$APP_ENV" ]; then echo "APP_ENV=$APP_ENV" >> deploy/.env; fi
+          if [ -n "$APP_NAME" ]; then echo "APP_NAME=$APP_NAME" >> deploy/.env; fi
+          if [ -n "$APP_KEY" ]; then echo "APP_KEY=$APP_KEY" >> deploy/.env; fi
+          if [ -n "$APP_DEBUG" ]; then echo "APP_DEBUG=$APP_DEBUG" >> deploy/.env; fi
+          if [ -n "$APP_URL" ]; then echo "APP_URL=$APP_URL" >> deploy/.env; fi
+          if [ -n "$APP_LOCALE" ]; then echo "APP_LOCALE=$APP_LOCALE" >> deploy/.env; fi
+          if [ -n "$APP_FALLBACK_LOCALE" ]; then echo "APP_FALLBACK_LOCALE=$APP_FALLBACK_LOCALE" >> deploy/.env; fi
+          if [ -n "$APP_FAKER_LOCALE" ]; then echo "APP_FAKER_LOCALE=$APP_FAKER_LOCALE" >> deploy/.env; fi
+          if [ -n "$DB_CONNECTION" ]; then echo "DB_CONNECTION=$DB_CONNECTION" >> deploy/.env; fi
+          if [ -n "$DB_HOST" ]; then echo "DB_HOST=$DB_HOST" >> deploy/.env; fi
+          if [ -n "$DB_PORT" ]; then echo "DB_PORT=$DB_PORT" >> deploy/.env; fi
+          if [ -n "$DB_DATABASE" ]; then echo "DB_DATABASE=$DB_DATABASE" >> deploy/.env; fi
+          if [ -n "$DB_USERNAME" ]; then echo "DB_USERNAME=$DB_USERNAME" >> deploy/.env; fi
+          if [ -n "$DB_PASSWORD" ]; then echo "DB_PASSWORD=$DB_PASSWORD" >> deploy/.env; fi
+          if [ -n "$CACHE_STORE" ]; then echo "CACHE_STORE=$CACHE_STORE" >> deploy/.env; fi
+          if [ -n "$FILESYSTEM_DRIVER" ]; then echo "FILESYSTEM_DRIVER=$FILESYSTEM_DRIVER" >> deploy/.env; fi
+          if [ -n "$FILESYSTEM_DISK" ]; then echo "FILESYSTEM_DISK=$FILESYSTEM_DISK" >> deploy/.env; fi
+          if [ -n "$QUEUE_CONNECTION" ]; then echo "QUEUE_CONNECTION=$QUEUE_CONNECTION" >> deploy/.env; fi
+          if [ -n "$LOG_CHANNEL" ]; then echo "LOG_CHANNEL=$LOG_CHANNEL" >> deploy/.env; fi
+          if [ -n "$LOG_LEVEL" ]; then echo "LOG_LEVEL=$LOG_LEVEL" >> deploy/.env; fi
+          # Mail settings
+          if [ -n "$MAIL_MAILER" ]; then echo "MAIL_MAILER=$MAIL_MAILER" >> deploy/.env; fi
+          if [ -n "$MAIL_HOST" ]; then echo "MAIL_HOST=$MAIL_HOST" >> deploy/.env; fi
+          if [ -n "$MAIL_PORT" ]; then echo "MAIL_PORT=$MAIL_PORT" >> deploy/.env; fi
+          if [ -n "$MAIL_USERNAME" ]; then echo "MAIL_USERNAME=$MAIL_USERNAME" >> deploy/.env; fi
+          if [ -n "$MAIL_PASSWORD" ]; then echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> deploy/.env; fi
+          if [ -n "$MAIL_ENCRYPTION" ]; then echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> deploy/.env; fi
+          if [ -n "$MAIL_FROM_ADDRESS" ]; then echo "MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS" >> deploy/.env; fi
+          if [ -n "$MAIL_FROM_NAME" ]; then echo "MAIL_FROM_NAME=\"$MAIL_FROM_NAME\"" >> deploy/.env; fi
+
+      - name: Write production index.php for InfinityFree
+        run: |
+          cat > deploy/index.php <<'PHP'
+          <?php
+          define('LARAVEL_START', microtime(true));
+          require __DIR__ . '/vendor/autoload.php';
+          $app = require_once __DIR__ . '/bootstrap/app.php';
+          $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+          $response = $kernel->handle(
+              $request = Illuminate\Http\Request::capture()
+          )->send();
+          $kernel->terminate($request, $response);
+          PHP
+
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          timeout: 600000
+          log-level: standard
+          local-dir: deploy
+          server-dir: ${{ secrets.FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/node_modules/**
+            **/tests/**
+            **/.env.example
+
+      - name: Post-deploy cache warmup (optional)
+        run: |
+          echo "Deployed to InfinityFree via FTP"
+        if: always()
+
+    env:
+      APP_NAME: ${{ secrets.APP_NAME }}
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: https://laravel-project.gt.tc
+      APP_LOCALE: en
+      APP_FALLBACK_LOCALE: en
+      APP_FAKER_LOCALE: en_US
+      # Optional DB envs (set also as repo secrets if needed)
+      DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      # Cache / Queue / Filesystem
+      CACHE_STORE: ${{ secrets.CACHE_STORE }}
+      QUEUE_CONNECTION: ${{ secrets.QUEUE_CONNECTION }}
+      FILESYSTEM_DRIVER: ${{ secrets.FILESYSTEM_DRIVER }}
+      FILESYSTEM_DISK: ${{ secrets.FILESYSTEM_DISK }}
+      LOG_CHANNEL: ${{ secrets.LOG_CHANNEL }}
+      LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+      # Mail
+      MAIL_MAILER: ${{ secrets.MAIL_MAILER }}
+      MAIL_HOST: ${{ secrets.MAIL_HOST }}
+      MAIL_PORT: ${{ secrets.MAIL_PORT }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      MAIL_ENCRYPTION: ${{ secrets.MAIL_ENCRYPTION }}
+      MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS }}
+      MAIL_FROM_NAME: ${{ secrets.MAIL_FROM_NAME }}
+      APP_KEY: ${{ secrets.APP_KEY }}
