@@ -35,7 +35,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::delete('/researches/{encryptedId}', [ResearchController::class, 'destroy'])
         ->name('researches.destroy');
         Route::get('/researches/{encryptedId}', [ResearchController::class, 'show'])
-    ->name('researches.show');
+            ->name('researches.show');
 
 
     // Approval Routes
@@ -57,14 +57,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
        // **User-only routes for show/download/bookmark**
     Route::middleware('role:User')->group(function() {
-        Route::get('/researches/{encryptedId}', [ResearchController::class, 'show'])->name('researches.show');
-        Route::get('/researches/download/{id}', [ResearchController::class, 'download'])->name('researches.download');
-        Route::post('/bookmark/toggle/{research}', [BookmarkController::class, 'toggle'])->name('bookmark.toggle');
+        // Use distinct route names to avoid duplication
+        Route::get('/researches/{encryptedId}', [ResearchController::class, 'show'])->name('researches.show.user');
+        Route::get('/researches/download/{id}', [ResearchController::class, 'download'])->name('researches.download.user');
+        Route::post('/bookmark/toggle/{research}', [BookmarkController::class, 'toggle'])->name('bookmark.toggle.user');
     });
 
     // Show + Download
-    Route::get('/researches/{id}', [ResearchController::class, 'show'])->name('researches.show');
-    Route::get('/researches/download/{id}', [ResearchController::class, 'download'])->name('researches.download');
+    // Remove duplicate routes that conflict with names above
+    // Route::get('/researches/{id}', [ResearchController::class, 'show'])->name('researches.show');
+    // Route::get('/researches/download/{id}', [ResearchController::class, 'download'])->name('researches.download');
 
     // Bookmark
     Route::get('/bookmark', [BookmarkController::class, 'index'])->name('bookmark.index');
