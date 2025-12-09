@@ -118,7 +118,7 @@ jobs:
           protocol: ftps
           timeout: 600000
           log-level: standard
-          local-dir: deploy
+          local-dir: deploy/
           server-dir: ${{ secrets.FTP_PATH }}
           exclude: |
             **/.git*
