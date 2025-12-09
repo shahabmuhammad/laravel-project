@@ -108,14 +108,18 @@ jobs:
           $kernel->terminate($request, $response);
           PHP
 
-      - name: Upload via FTP
+      - name: Ensure .htaccess is present at deploy root
+        run: |
+          if [ -f public/.htaccess ]; then cp public/.htaccess deploy/.htaccess; fi
+
+      - name: Upload via FTP (non-TLS for InfinityFree)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          protocol: ftps
+          protocol: ftp
           timeout: 600000
           log-level: standard
           local-dir: deploy/
